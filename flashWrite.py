@@ -85,7 +85,7 @@ def write_byte(addr, value):
     we.value(1)
     time.sleep_us(5)  # Short delay to allow bus to settle
     read_val = 0
-    time.sleep_us(20000)
+    time.sleep_us(10000)
     for i, pin in enumerate(io_pins):
         read_val |= (pin.value() << i)
     ce.value(1)
