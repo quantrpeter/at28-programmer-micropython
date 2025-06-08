@@ -12,7 +12,7 @@ read:
 	mpremote exec "import flashRead; flashRead.dump_flash(0, 128)"
 
 write:
-	mpremote exec "import flashWrite; flashWrite.write('w 2 0x23')"
+	mpremote exec "import flashWrite; flashWrite.write('w 2 0x23 3 0x45')"
 
 writeAll:
 	mpremote exec "import flashWrite; flashWrite.write_00_to_ff()"
