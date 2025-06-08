@@ -97,18 +97,18 @@ def write_byte(addr, value):
     # Verify the written value
     failTime = 0
     while True:
-        # set_address(addr)
-        # ce.value(0)
-        # oe.value(0)
-        # we.value(1)
+        set_address(addr)
+        ce.value(0)
+        oe.value(0)
+        we.value(1)
         read_val = 0
         # time.sleep_us(8000)
         for i, pin in enumerate(io_pins):
             read_val |= (pin.value() << i)
-        # ce.value(1)
-        # oe.value(1)
+        ce.value(1)
+        oe.value(1)
 
-        # print(f"addr: {addr}, failTime: {failTime}, read_val: {read_val:02X}, value: {value:02X}")
+        #print(f"addr: {addr}, failTime: {failTime}, read_val: {read_val:02X}, value: {value:02X}")
         failTime += 1
         if read_val == value or failTime == 100000:
             break
@@ -116,8 +116,7 @@ def write_byte(addr, value):
         time.sleep_us(10)
 
     if read_val != value:
-        print(
-            f"Verify fail at {addr:04X}: wrote {value:02X}, read {read_val:02X}")
+        print(f"Verify fail at {addr:04X}: wrote {value:02X}, read {read_val:02X}")
         # exit program
         raise Exception(
             f"Verification failed at address {addr:04X}: wrote {value:02X}, read {read_val:02X}")

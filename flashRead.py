@@ -93,4 +93,4 @@ def dump_flash(start, len):
         print(' '.join(row))
 
 if __name__ == "__main__":
-    dump_flash()
+    dump_flash(0, 2048)
