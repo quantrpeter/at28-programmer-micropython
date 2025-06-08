@@ -67,6 +67,7 @@ def set_data(value):
         pin.value((value >> i) & 1)
 
 def write_byte(addr, value):
+    value=value & 0xff
     set_address(addr)
     set_data_pins_output()
     set_data(value)
@@ -84,16 +85,33 @@ def write_byte(addr, value):
     oe.value(0)
     we.value(1)
     time.sleep_us(5)  # Short delay to allow bus to settle
-    read_val = 0
-    time.sleep_us(10000)
-    for i, pin in enumerate(io_pins):
-        read_val |= (pin.value() << i)
-    ce.value(1)
-    oe.value(1)
-    if read_val != value & 0xff:
+
+	# Verify the written value
+    failTime=0
+    while True:
+        # set_address(addr)
+        # ce.value(0)
+        # oe.value(0)
+        # we.value(1)
+        read_val = 0
+		# time.sleep_us(8000)
+        for i, pin in enumerate(io_pins):
+            read_val |= (pin.value() << i)
+        # ce.value(1)
+        # oe.value(1)
+        
+        # print(f"addr: {addr}, failTime: {failTime}, read_val: {read_val:02X}, value: {value:02X}")
+        failTime+=1
+        if read_val == value or failTime==100000:
+            break
+        
+        time.sleep_us(10)
+        
+    if read_val != value:
         print(f"Verify fail at {addr:04X}: wrote {value:02X}, read {read_val:02X}")
-        # exit program
+		# exit program
         raise Exception(f"Verification failed at address {addr:04X}: wrote {value:02X}, read {read_val:02X}")
+
 
 def write_00_to_ff():
     i2c=machine.I2C(1)
@@ -111,6 +129,30 @@ def write_00_to_ff():
     
         write_byte(addr, addr)
         print(f"W {addr:02X} to {addr:04X}")
+
+def write(str):
+    # Parse the input string into address-value pairs and write each value
+    str=str[2:] # Remove "w " prefix
+    tokens = str.strip().split()
+    if len(tokens) % 2 != 0:
+        raise ValueError("Input string must contain pairs of <addr> <value>")
+    i2c = machine.I2C(1)
+    display = ssd1306.SSD1306_I2C(128, 64, i2c)
+    display.fill(0)
+    display.text("AT28 Programmer", 5, 5, 1)
+    display.show()
+    
+    for i in range(0, len(tokens), 2):
+        addr = int(tokens[i], 0)  # Support hex (0x...), decimal, etc.
+        value = int(tokens[i+1], 0)
+        write_byte(addr, value)
+        print(f"Wrote {value:02X} to {addr:04X}")
+        # Optionally update display for each write
+        display.fill(0)
+        display.text("AT28 Programmer", 5, 5, 1)
+        display.text(f"W {value:02X} to {addr:04X}", 5, 30, 1)
+        display.show()
+
 
 if __name__ == "__main__":
     write_00_to_ff()

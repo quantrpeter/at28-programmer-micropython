@@ -35,17 +35,17 @@ WE_PIN = 'A5'
 # Helper to get pin object from name
 def get_pin(pin_name, mode):
     # Use string pin names directly, e.g., 'A2', 'B5'
-    print(pin_name)
+    # print(pin_name)
     return machine.Pin(pin_name, mode)
 
 # Setup address pins
-print("Setup address pins")
+# print("Setup address pins")
 addr_pins = [get_pin(p[0], machine.Pin.OUT) for p in ADDR_PINS]
 # Setup data pins
-print("Setup data pins")
+# print("Setup data pins")
 io_pins = [get_pin(p[0], machine.Pin.IN) for p in IO_PINS]
 # Setup control pins
-print("Setup control pins")
+# print("Setup control pins")
 ce = get_pin(CE_PIN, machine.Pin.OUT)
 oe = get_pin(OE_PIN, machine.Pin.OUT)
 we = get_pin(WE_PIN, machine.Pin.OUT)
@@ -67,15 +67,16 @@ def read_byte(addr):
     oe.value(1)
     return value
 
-def dump_flash():
+def dump_flash(start, len):
     i2c=machine.I2C(1)
     display = ssd1306.SSD1306_I2C(128, 64, i2c)
     display.fill(0)
     display.text("AT28 Programmer", 5, 5, 1)
     display.show()
     
-    for base in range(0, 2048, 16):
+    for base in range(start, start+len, 16):
         row = []
+        row.append(f"{base:04X}:")
         for offset in range(16):
             addr = base + offset
             
