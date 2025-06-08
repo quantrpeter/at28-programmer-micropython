@@ -138,6 +138,11 @@ def write_00_to_ff():
 
         write_byte(addr, addr)
         print(f"W {addr:02X} to {addr:04X}")
+    
+    display.fill(0)
+    display.text("AT28 Programmer", 5, 5, 1)
+    display.text(f"W {addr:02X} to {addr:04X}", 5, 30, 1)
+    display.show()
 
 
 def write(str):
