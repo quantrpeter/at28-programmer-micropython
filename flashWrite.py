@@ -108,7 +108,7 @@ def write_byte(addr, value):
         ce.value(1)
         oe.value(1)
 
-        #print(f"addr: {addr}, failTime: {failTime}, read_val: {read_val:02X}, value: {value:02X}")
+        print(f"addr: {addr}, failTime: {failTime}, read_val: {read_val:02X}, value: {value:02X}")
         failTime += 1
         if read_val == value or failTime == 100000:
             break
