@@ -1,4 +1,5 @@
 deploy:
+	mpremote rm :boot.py
 	mpremote cp flashWrite.py :flashWrite.py
 	mpremote cp flashRead.py :flashRead.py
 	mpremote cp dummy.py :dummy.py
