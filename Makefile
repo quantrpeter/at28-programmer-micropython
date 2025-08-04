@@ -1,5 +1,5 @@
 deploy:
-	mpremote rm :boot.py
+	-mpremote rm :boot.py
 	mpremote cp flashWrite.py :flashWrite.py
 	mpremote cp flashRead.py :flashRead.py
 	mpremote cp dummy.py :dummy.py
@@ -11,6 +11,9 @@ dummy:
 
 read:
 	mpremote exec "import flashRead; flashRead.dump_flash(0, 2048)"
+
+erase:
+	mpremote exec "import flashWrite; flashWrite.erase()"
 
 write:
 	mpremote exec "import flashWrite; flashWrite.write('w 2 0x23 3 0x45')"

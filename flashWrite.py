@@ -108,12 +108,14 @@ def write_byte(addr, value):
         ce.value(1)
         oe.value(1)
 
-        print(f"addr: {addr}, failTime: {failTime}, read_val: {read_val:02X}, value: {value:02X}")
+        print(f"addr: {addr}, failTime: {failTime}, read_val: {read_val:02X}, expected value: {value:02X}")
         failTime += 1
-        if read_val == value or failTime == 100000:
+        if read_val == value or failTime == 100:
             break
+        else:
+            time.sleep_ms(100)
 
-        time.sleep_us(10)
+        time.sleep_us(400)
 
     if read_val != value:
         print(f"Verify fail at {addr:04X}: wrote {value:02X}, read {read_val:02X}")
@@ -174,6 +176,10 @@ def write(str):
     display.text(f"W {value:02X} to {addr:04X}", 5, 30, 1)
     display.show()
 
+def erase():
+    for addr in range(2048):
+        write_byte(addr, 0x00)
+        
 
 if __name__ == "__main__":
     write_00_to_ff()
