@@ -112,8 +112,8 @@ def write_byte(addr, value):
         if read_val == value or failTime == 100:
             break
         
-        # if failTime > 10:
-        #     print(f"addr: {addr:04X}, failTime: {failTime}, read_val: {read_val:02X}, expected value: {value:02X}")
+        if failTime > 10:
+            print(f"addr: {addr:04X}, failTime: {failTime}, read_val: {read_val:02X}, expected value: {value:02X}")
         failTime += 1
         time.sleep_us(100)
 
@@ -180,7 +180,7 @@ def write(str):
 
 def erase():
     for addr in range(2048):
-        # print(f"W {addr:04X}")
+        print(f"W {addr:04X}")
         write_byte(addr, 0x00)
 
 
