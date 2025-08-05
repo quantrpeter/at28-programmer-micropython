@@ -82,7 +82,7 @@ def write_byte(addr, value):
     oe.value(1)  # OE high (disable output)
     ce.value(0)  # CE low
     we.value(0)  # WE low (write enable)
-    time.sleep_us(150)  # Write pulse width (increased)
+    time.sleep_us(1)  # Write pulse width (increased)
     we.value(1)  # WE high
     ce.value(1)  # CE high
     set_data_pins_input()  # Restore data pins to input
@@ -98,23 +98,24 @@ def write_byte(addr, value):
     failTime = 0
     while True:
         # time.sleep_ms(10)
-        set_address(addr)
+        # set_address(addr)
         we.value(1)
         ce.value(0)
         oe.value(0)
         read_val = 0
-        time.sleep_us(100)  
+        time.sleep_us(1)  
         for i, pin in enumerate(io_pins):
             read_val |= (pin.value() << i)
         ce.value(1)
         oe.value(1)
 
-        if failTime > 10:
-            print(f"addr: {addr:04X}, failTime: {failTime}, read_val: {read_val:02X}, expected value: {value:02X}")
-        failTime += 1
         if read_val == value or failTime == 100:
             break
-        time.sleep_us(10)
+        
+        # if failTime > 10:
+        #     print(f"addr: {addr:04X}, failTime: {failTime}, read_val: {read_val:02X}, expected value: {value:02X}")
+        failTime += 1
+        time.sleep_us(100)
 
     if read_val != value:
         print(
@@ -138,8 +139,8 @@ def write_00_to_ff():
             display.text(f"W {addr:04X} to {addr:04X}", 5, 30, 1)
             display.show()
 
-        write_byte(addr, addr)
         print(f"W {addr:04X} to {addr:04X}")
+        write_byte(addr, addr)
 
     display.fill(0)
     display.text("AT28 Programmer", 5, 5, 1)
@@ -179,8 +180,8 @@ def write(str):
 
 def erase():
     for addr in range(2048):
+        # print(f"W {addr:04X}")
         write_byte(addr, 0x00)
-        print(f"W {addr:04X}")
 
 
 if __name__ == "__main__":
