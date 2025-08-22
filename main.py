@@ -1,6 +1,9 @@
 import ssd1306
 import machine
 
+import pyb
+pyb.usb_mode('VCP+HID')
+
 i2c=machine.I2C(1)
 display = ssd1306.SSD1306_I2C(128, 64, i2c)
 display.fill(0)
