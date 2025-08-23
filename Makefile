@@ -1,8 +1,8 @@
 deploy:
+	mpremote cp boot.py :boot.py
 	mpremote cp flashWrite.py :flashWrite.py
 	mpremote cp flashRead.py :flashRead.py
 	mpremote cp dummy.py :dummy.py
-	mpremote cp boot.py :boot.py
 	mpremote cp ssd1306.py :ssd1306.py
 
 dummy:
