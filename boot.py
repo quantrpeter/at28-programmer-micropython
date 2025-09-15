@@ -1,8 +1,8 @@
-# import pyb
+import pyb
 # usb = pyb.USB_VCP()
 # while not usb.isconnected():
 #     time.sleep_ms(100)
-# pyb.usb_mode('VCP+HID')
+pyb.usb_mode('VCP+HID')
 
 import ssd1306
 import machine
