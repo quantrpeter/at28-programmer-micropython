@@ -1,15 +1,17 @@
-deploy:
+upload:
 	mpremote cp boot.py :boot.py
-	mpremote cp flashWrite.py :flashWrite.py
-	mpremote cp flashRead.py :flashRead.py
+	mpremote cp flashWrite_at24.py :
+	mpremote cp flashWrite_at28.py :
+	mpremote cp flashRead_at24.py :
+	mpremote cp flashRead_at28.py :
 	mpremote cp dummy.py :dummy.py
 	mpremote cp ssd1306.py :ssd1306.py
 
 dummy:
 	mpremote exec "import dummy"
 
-read:
-	mpremote exec "import flashRead; flashRead.dump_flash(0, 2048)"
+read_at24:
+	mpremote exec "import flashRead_at24; flashRead_at24.dump_flash(0, 128)"
 
 erase:
 	mpremote exec "import flashWrite; flashWrite.erase()"
