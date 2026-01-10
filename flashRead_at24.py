@@ -1,24 +1,27 @@
 import machine
 import time
 import ssd1306
+from machine import I2C, Pin
 
 # AT24 EEPROM I2C configuration
 # Common AT24 I2C addresses: 0x50-0x57 (depending on A0-A2 pins)
-AT24_I2C_ADDR = 0x3c
+AT24_I2C_ADDR = 0x50
 
 # I2C bus configuration (I2C1)
-# SCL and SDA pins will be auto-configured by I2C(1)
+# WeAct STM32F411 BlackPill I2C pins
+# I2C1: SCL=PB6, SDA=PB7 (or SCL=PB8, SDA=PB9 as alternative)
 i2c = None
 
 def init_i2c():
     global i2c
-    # Initialize I2C bus (bus 1, typically SCL=B6, SDA=B7 on STM32)
-    i2c = machine.I2C(1, freq=100000)
+    # Initialize I2C bus with explicit pin configuration for WeAct BlackPill
+    # Using I2C2 with SCL=PB10, SDA=PB9
+    i2c = machine.I2C(2, freq=100000)
     # Scan for devices
     devices = i2c.scan()
+    print(f"I2C scan found {len(devices)} device(s): {[hex(d) for d in devices]}")
     if AT24_I2C_ADDR not in devices:
         print(f"Warning: AT24 not found at address 0x{AT24_I2C_ADDR:02X}")
-        print(f"Found devices: {[hex(d) for d in devices]}")
 
 def read_byte(addr):
     """Read a single byte from AT24 EEPROM at given address"""
@@ -40,9 +43,10 @@ def dump_flash(start, length):
     init_i2c()
     
     # Initialize display
-    display = ssd1306.SSD1306_I2C(128, 64, i2c)
+    i2c_display=machine.I2C(1)
+    display = ssd1306.SSD1306_I2C(128, 64, i2c_display)
     display.fill(0)
-    display.text("AT24 Programmer", 5, 5, 1)
+    display.text("AT28 Programmer", 5, 5, 1)
     display.show()
     
     for base in range(start, start+length, 16):

@@ -11,7 +11,7 @@ dummy:
 	mpremote exec "import dummy"
 
 read_at24:
-	mpremote exec "import flashRead_at24; flashRead_at24.dump_flash(0, 128)"
+	mpremote exec "import flashRead_at24; flashRead_at24.dump_flash(0, 1280)"
 
 erase:
 	mpremote exec "import flashWrite; flashWrite.erase()"
