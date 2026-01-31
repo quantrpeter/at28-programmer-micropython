@@ -9,7 +9,6 @@ AT24_I2C_ADDR = 0x50
 
 # I2C bus configuration (I2C1)
 # WeAct STM32F411 BlackPill I2C pins
-# I2C1: SCL=PB6, SDA=PB7 (or SCL=PB8, SDA=PB9 as alternative)
 i2c = None
 
 def init_i2c():
@@ -43,11 +42,11 @@ def dump_flash(start, length):
     init_i2c()
     
     # Initialize display
-    i2c_display=machine.I2C(1)
-    display = ssd1306.SSD1306_I2C(128, 64, i2c_display)
-    display.fill(0)
-    display.text("AT28 Programmer", 5, 5, 1)
-    display.show()
+    # i2c_display=machine.I2C(1)
+    # display = ssd1306.SSD1306_I2C(128, 64, i2c_display)
+    # display.fill(0)
+    # display.text("AT28 Programmer", 5, 5, 1)
+    # display.show()
     
     for base in range(start, start+length, 16):
         row = []
@@ -55,11 +54,11 @@ def dump_flash(start, length):
         for offset in range(16):
             addr = base + offset
             
-            if addr % 500 == 0:
-                display.fill(0)
-                display.text("AT24 Programmer", 5, 5, 1)
-                display.text(f"R {addr:04X}", 5, 30, 1)
-                display.show()
+            # if addr % 500 == 0:
+            #     display.fill(0)
+            #     display.text("AT24 Programmer", 5, 5, 1)
+            #     display.text(f"R {addr:04X}", 5, 30, 1)
+            #     display.show()
                 
             if addr >= start + length:
                 break
